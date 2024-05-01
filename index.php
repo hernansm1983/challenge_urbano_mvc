@@ -3,8 +3,6 @@ require_once("db/db.php");
 require_once("controllers/userController.php");
 
 
-
-
 //--- MAGIA DEL INDEX.PHP ---
 if(isset($_GET['controller'])){
     
@@ -21,10 +19,7 @@ if(isset($_GET['controller'])){
     //show_error(); 
     
 }
-/*echo $nombre_controlador."</br>";
-echo $action_default;
-$controlador = new $nombre_controlador();
-$controlador->$action();*/
+
 
 if(class_exists($nombre_controlador)){
     
@@ -47,8 +42,4 @@ if(class_exists($nombre_controlador)){
     //show_error(); 
 }   
 
-//echo $nombre_controlador."</br>";
-//echo $action_default;
-
-//require_once 'views/layout/footer.php';
 ?>

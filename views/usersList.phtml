@@ -1,32 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Listado de Usuarios</title>
-    </head>
+<?php include_once("views/header.phtml");?>
     <body>
         <h1>Listado de Usuarios</h1>
-        <a href="?controller=user&action=createUser">Nuevo Usuario</a>
+
         </br></br>
-        <table border="1px">
+        <table>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Pass</th>
+                <th>Surname</th>
                 <th>E-Mail</th>
                 <th>Created At</th>
                 <th>Updated At</th>
+                <th>Action</th>
             </tr>
             <?php
             foreach ($datos as $dato) {
                 echo "<tr><td>" . $dato["id"] . "</td>";
                 echo "<td>" . $dato["name"] . "</td>";
-                echo "<td>" . $dato["password"] . "</td>";
+                echo "<td>" . $dato["surname"] . "</td>";
                 echo "<td>" . $dato["email"] . "</td>";
                 echo "<td>" . $dato["created_at"] . "</td>";
-                echo "<td>" . $dato["updated_at"] . "</td></tr>";
+                echo "<td>" . $dato["updated_at"] . "</td>";
+                echo "<td>";
+                echo "<a href='?controller=user&action=updateUser&id=" . $dato["id"] . "'>Editar</a> | ";
+                echo "<a href='?controller=user&action=deleteUser&id=" . $dato["id"] . "' onclick='confirmDelete(" . $dato["id"] . ")'>Eliminar</a>";
+                echo "</td>";
+                echo "</tr>";
             }
             ?>
         </table>
+        <script>
+            function confirmDelete(userId) {
+                if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+                   // window.location.href = "?controller=user&action=deleteUser&id=" + userId;
+                }
+            }
+        </script>
     </body>
-</html>
+<?php include_once("views/footer.phtml");?>

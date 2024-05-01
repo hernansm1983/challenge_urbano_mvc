@@ -18,18 +18,34 @@ class User{
 
     public function getUsers(){
 
-        $consulta=$this->db->query("select * from users;");
+        $sql = $this->db->query("SELECT * FROM users ");
 
-        while($filas=$consulta->fetch_assoc()){
-            $this->users[]=$filas;
+        while($rows = $sql->fetch_assoc()){
+            $this->users[]=$rows;
         }
 
         return $this->users;
     }
 
 
+    public function getUserById($id){
+
+        $sql = $this->db->query("SELECT * FROM users WHERE id = '$id' ");
+
+        $user = $sql->fetch_assoc();
+
+        return $user;
+    }
+
+
     public function saveUser(){
-        $sql = "INSERT INTO `users` (`id`, `name`, `surname`, `password`, `email`) VALUES (null, '{$this->getName()}', '{$this->getSurname()}', '{$this->getPassword()}', '{$this->getEmail()}')";
+        $sql = "INSERT INTO `users` (`id`, `name`, `surname`, `password`, `email`) 
+                VALUES (null, 
+                        '{$this->getName()}', 
+                        '{$this->getSurname()}', 
+                        '{$this->getPassword()}', 
+                        '{$this->getEmail()}')";
+
         $save = $this->db->query($sql);
         
         $result = false;
@@ -40,12 +56,39 @@ class User{
         return $result;
     }
 
-    public function update_persona($id, $nombre, $contrasena, $email){
-        // Aquí realizas la actualización de los datos de una persona en la base de datos
+    public function updateUser($id){
+        $sql = "UPDATE `users` SET 
+                `name` = '{$this->getName()}',
+                `surname` = '{$this->getSurname()}',
+                `password` = '{$this->getPassword()}',
+                `email` = '{$this->getEmail()}'
+                WHERE `id` = $id";
+    
+        $update = $this->db->query($sql);
+        
+        $result = false;
+        if($update){
+            $result = true;
+        }
+        
+        return $result;
     }
+    
 
-    public function delete_persona($id){
-        // Aquí realizas la eliminación de una persona de la base de datos
+    public function deleteUserById($id) {
+        //die("deleteUserById");
+        // Conectar a la base de datos y realizar la eliminación
+        $sql = "DELETE FROM users WHERE id = $id";
+        //die($sql);
+        $delete = $this->db->query($sql);
+
+        // Verificar si la eliminación fue exitosa
+        if ($delete) {
+            return true; // Eliminación exitosa
+        } else {
+            return false; // Error al eliminar
+        }
+            // Aquí realizas la eliminación de una persona de la base de datos
     }
 
     /**

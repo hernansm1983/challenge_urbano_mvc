@@ -1,4 +1,4 @@
-$(document).ready(function() {
+/*$(document).ready(function() {
     // Este código se ejecuta cuando el documento HTML ha sido completamente cargado
 
     // Ejemplo: Obtener la lista de usuarios al cargar la página
@@ -47,4 +47,7 @@ $(document).ready(function() {
     });
 
     // Otros eventos y funciones de jQuery pueden agregarse según sea necesario
-});
+});*/
+
+
+
