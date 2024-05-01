@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Crear Nuevo Usuarios</title>
+    </head>
+    <body>
+        <h1>Crear Nuevo Usuario</h1>
+        <a href="?controller=user&action=index">Home</a>
+        <h2>Registro de Usuarios</h2>
+
+        <div id="mensaje">
+        <?php if(isset($_SESSION['register']) && $_SESSION['register'] == "Complete") : ?>
+            <strong id="mensaje_true">Registro Completado Correctamente</strong>
+        <?php elseif(isset($_SESSION['register']) && $_SESSION['register'] != "Complete"): ?>
+            <strong id="mensaje_false">El Registro no se ha podido Completar Correctamente,</br> corrija los errores e intente nuevamente.</strong>
+        <?php endif; 
+        
+        var_dump($_SESSION["register"]);?>
+        
+        </div>
+        <form action="?controller=user&action=save" method="POST">
+            <label for="name">Nombre:</label><br>
+            <input type="text" id="name" name="name" value="<?=$_SESSION['registerData']['name']?>" required><br><br>
+
+            <?= isset($_SESSION["register"]['name']) ? $_SESSION["register"]['name'] : '' ?>
+
+            <label for="surname">Apellido:</label><br>
+            <input type="text" id="surname" name="surname" value="<?=$_SESSION['registerData']['surname']?>" required><br><br>
+
+            <?= isset($_SESSION["register"]['surname']) ? $_SESSION["register"]['surname'] : '' ?>
+            
+            <label for="password1">Contraseña:</label><br>
+            <input type="password" id="password1" name="password1" required><br><br>
+
+            <label for="password2">Repetir Contraseña:</label><br>
+            <input type="password" id="password2" name="password2" required><br><br>
+
+            <?= isset($_SESSION["register"]['password']) ? $_SESSION["register"]['password'] : '' ?>
+
+            
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" value="<?=$_SESSION['registerData']['email']?>" required><br><br>
+
+            <?= isset($_SESSION["register"]['email']) ? $_SESSION["register"]['email'] : '' ?>
+            
+            <input type="submit" value="Registrarse">
+        </form>
+    </body>
+</html>

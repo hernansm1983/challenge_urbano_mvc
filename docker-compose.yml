@@ -1,0 +1,43 @@
+services:
+  php:
+    container_name: php_urbano
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - network_urbano
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_urbano
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: urbano_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./Sql:/docker-entrypoint-initdb.d 
+    #Creé este volumen para que se ejecute el /sql/users.sql en caso de que no este creada la tabla al iniciar el Docker
+    networks:
+      - network_urbano
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_urbano
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      - network_urbano
+
+networks:
+  network_urbano:
+    name: network_urbano

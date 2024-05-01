@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Listado de Usuarios</title>
+    </head>
+    <body>
+        <h1>Listado de Usuarios</h1>
+        <a href="?controller=user&action=createUser">Nuevo Usuario</a>
+        </br></br>
+        <table border="1px">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Pass</th>
+                <th>E-Mail</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+            <?php
+            foreach ($datos as $dato) {
+                echo "<tr><td>" . $dato["id"] . "</td>";
+                echo "<td>" . $dato["name"] . "</td>";
+                echo "<td>" . $dato["password"] . "</td>";
+                echo "<td>" . $dato["email"] . "</td>";
+                echo "<td>" . $dato["created_at"] . "</td>";
+                echo "<td>" . $dato["updated_at"] . "</td></tr>";
+            }
+            ?>
+        </table>
+    </body>
+</html>
