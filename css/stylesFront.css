@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para el header */
+header {
+    background-color: #6baf7e; /* Color de fondo */
+    color: #050505; /* Color del texto */
+    padding: 10px; /* Espaciado interior */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none; /* Elimina los marcadores de lista */
+    padding: 0; /* Elimina el espacio interno */
+}
+
+header nav ul li {
+    display: inline; /* Muestra los elementos en línea */
+    margin-right: 20px; /* Espaciado entre elementos */
+}
+
+header nav ul li a {
+    color: #fff; /* Color del enlace */
+    text-decoration: none; /* Elimina la subrayado */
+}
+
+/* Estilos para el footer */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px; /* Ajusta según el tamaño de tu footer */
+    background-color: #6baf7e;;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 10px; /* Ajusta según el contenido de tu footer */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px; /* Añadido para separar el título del resto de la página */
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%; /* Ajustado para que la tabla ocupe el 80% del ancho del contenedor */
+    margin: 20px auto; /* Centrado horizontalmente con un margen superior de 20px */
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

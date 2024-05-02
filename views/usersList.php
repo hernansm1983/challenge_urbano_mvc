@@ -1,4 +1,4 @@
-<?php include_once("views/header.phtml");?>
+<?php include_once("views/header.php");?>
     <body>
         <h1>Listado de Usuarios</h1>
 
@@ -37,4 +37,4 @@
             }
         </script>
     </body>
-<?php include_once("views/footer.phtml");?>
+<?php include_once("views/footer.php");?>

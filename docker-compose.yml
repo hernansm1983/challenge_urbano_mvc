@@ -22,7 +22,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./Sql:/docker-entrypoint-initdb.d 
+      - ./sql:/docker-entrypoint-initdb.d 
+      - urbano-db-data:/var/lib/mysql
     #Creé este volumen para que se ejecute el /sql/users.sql en caso de que no este creada la tabla al iniciar el Docker
     networks:
       - network_urbano
@@ -37,6 +38,9 @@ services:
       - "8080:80"
     networks:
       - network_urbano
+
+volumes:
+  urbano-db-data:
 
 networks:
   network_urbano:
