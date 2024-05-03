@@ -1,4 +1,7 @@
 <?php
+
+require_once("db/db.php");
+
 class User{
 
     private $db;
@@ -16,6 +19,8 @@ class User{
         $this->users=array();
     }
 
+
+    // --- Obtiene una Lista con todos los Usuarios ---
     public function getUsers(){
 
         $sql = $this->db->query("SELECT * FROM users ");
@@ -28,6 +33,7 @@ class User{
     }
 
 
+    // --- Obtiene un Usuario por ID ---
     public function getUserById($id){
 
         $sql = $this->db->query("SELECT * FROM users WHERE id = '$id' ");
@@ -38,6 +44,7 @@ class User{
     }
 
 
+    // --- Guarda los datos de un Usuario ---
     public function saveUser(){
         $sql = "INSERT INTO `users` (`id`, `name`, `surname`, `password`, `email`) 
                 VALUES (null, 
@@ -56,6 +63,8 @@ class User{
         return $result;
     }
 
+
+    // --- Actualiza un Usuario por ID ---
     public function updateUser($id){
         $sql = "UPDATE `users` SET 
                 `name` = '{$this->getName()}',
@@ -75,21 +84,37 @@ class User{
     }
     
 
+    // --- Borra un Usuario por ID ---
     public function deleteUserById($id) {
-        //die("deleteUserById");
+
         // Conectar a la base de datos y realizar la eliminación
         $sql = "DELETE FROM users WHERE id = $id";
-        //die($sql);
         $delete = $this->db->query($sql);
 
         // Verificar si la eliminación fue exitosa
         if ($delete) {
-            return true; // Eliminación exitosa
+            return true;
         } else {
-            return false; // Error al eliminar
+            return false;
         }
-            // Aquí realizas la eliminación de una persona de la base de datos
+
     }
+
+
+    // --- Obtiene Un Usuario por Email ---
+    public function getUserByEmail($email){
+
+        $email = $this->db->real_escape_string($email);
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $result = $this->db->query($sql);
+
+        if ($result->num_rows == 1) {
+            return $result->fetch_assoc();
+        } else {
+            return null;
+        }
+    }
+    
 
     /**
      * Get the value of id
@@ -97,6 +122,7 @@ class User{
     public function getId() {
         return $this->id;
     }
+
 
     /**
      * Set the value of id
@@ -106,12 +132,14 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of name
      */
     public function getName() {
         return $this->name;
     }
+
 
     /**
      * Set the value of name
@@ -121,12 +149,14 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of surname
      */
     public function getSurname() {
         return $this->surname;
     }
+
 
     /**
      * Set the value of surname
@@ -136,12 +166,14 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of email
      */
     public function getEmail() {
         return $this->email;
     }
+
 
     /**
      * Set the value of email
@@ -151,12 +183,14 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of password
      */
     public function getPassword() {
         return $this->password;
     }
+
 
     /**
      * Set the value of password
@@ -166,12 +200,14 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of updated_at
      */
     public function getUpdatedAt() {
         return $this->updated_at;
     }
+
 
     /**
      * Set the value of updated_at
@@ -181,6 +217,7 @@ class User{
         return $this;
     }
 
+
     /**
      * Get the value of created_at
      */
@@ -188,6 +225,7 @@ class User{
         return $this->created_at;
     }
 
+    
     /**
      * Set the value of created_at
      */

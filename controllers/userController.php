@@ -2,21 +2,29 @@
 
 
 require_once("models/User.php");
-//$per = new User();
 
 class userController {
 
     // --- Carga la vista de todos los Usuarios creados ---
     public function index() {
+
+        if (isset($_SESSION['registerMsg'])) {
+            unset($_SESSION['registerMsg']);
+        }
+
         $per = new User();
         $datos = $per->getUsers();
-        require_once("views/usersList.phtml");
+        require_once("views/usersList.php");
     }
 
 
     // --- Carga el Form de creacion de Usuarios ---
     public function createUser() {
-        require_once("views/usersCreateForm.phtml");
+        // --- limpiamos las variables de session antes de redireccionar al form ---
+        if (isset($_SESSION['registerData']) && $_GET['e'] != 1) {
+            unset($_SESSION['registerData']);
+        }
+        require_once("views/usersCreateForm.php");
     }
 
 
@@ -34,9 +42,7 @@ class userController {
             $_SESSION['registerData']['email'] = $user['email'];
             $_SESSION['registerData']['action'] = "update";
 
-            require_once("views/usersCreateForm.phtml");
-        } else {
-            // ERROR
+            require_once("views/usersCreateForm.php");
         }
     }
 
@@ -45,11 +51,12 @@ class userController {
     public function clearSession() {
 
         if (isset($_SESSION['registerData'])) {
-            session_unset($_SESSION['registerData']);
+            unset($_SESSION['registerData']);
         }
 
-        require_once("views/usersCreateForm.phtml");
+        require_once("views/usersCreateForm.php");
     }
+
 
     // --- Guarda en la DB 
     public function save(){ 
@@ -58,9 +65,10 @@ class userController {
 
             // --- Establecemos en una Variable de session que estamos creando un usuario nuevo ---
             $_SESSION['registerData']['action'] = "create";
+            $action = isset($_POST['action']) ? $_POST['action'] : false;
+            $target = isset($_POST['target']) ? $_POST['target'] : false;
             
             $id = isset($_POST['id']) ? $_POST['id'] : false;
-           // die($id);
             $name = isset($_POST['name']) ? $_POST['name'] : false;
             $surname = isset($_POST['surname']) ? $_POST['surname'] : false;
             $email = isset($_POST['email']) ? trim($_POST['email']) : false;
@@ -78,82 +86,88 @@ class userController {
             // Validar los datos antes de guardarlos en la base de datos
             // Validar campo nombre
             if(empty($name) || is_numeric($name) || preg_match("/[0-9]/", $name)){
-                $errores['name'] = "El nombre no es válido, no debe contener numeros";
+                $errores['name'] = '<div class="error-message">El nombre no es válido, no debe contener numeros</div>';
             }
 
             // Validar apellidos
             if(empty($surname) || is_numeric($surname) || preg_match("/[0-9]/", $surname)){
-                $errores['surname'] = "El apellido no es válido, no debe contener numeros";
+                $errores['surname'] = '<div class="error-message">El apellido no es válido, no debe contener numeros</div>';
             }
 
             // Validar el email
             if(empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $errores['email'] = "El email no es válido";
+                $errores['email'] = '<div class="error-message">El email no es válido</div>';
             }
 
             // Validar la contraseña
             if(!empty($password1) && !empty($password2) ){
                 
                 if($password1 != $password2){
-                    $errores['password'] = "Las contraseñas deben ser iguales";
+                    $errores['password'] = '<div class="error-message">Las contraseñas deben ser iguales</div>';
+                } else {
+                    // --- Ciframos la contraseña para darle mayor seguridad al sistema ---
+                    $hashedPassword = password_hash($password1, PASSWORD_DEFAULT);
                 }
                     
             }else{
-                $errores['password'] = "Las contraseñas no deben estar vacías";
+                $errores['password'] = '<div class="error-message">Las contraseñas no deben estar vacías</div>';
             }
             
             $user = new User();
             $user->setName($name);
             $user->setSurname($surname);
             $user->setEmail($email);
-            $user->setPassword($password1);
-            
-            $guardar_usuario = false;
+            $user->setPassword($hashedPassword);
 	
             if(count($errores) == 0){
                 
-                    $guardar_usuario = true;
-            
                     // --- Se llama al create o al update ---
-                    if (isset($id)) {
-                        //die("update");
+                    if (!empty($id) && $target == "updateUser") {
+
                         $save = $user->updateUser($id);
 
                         if($save){
     
-                            $_SESSION['register'] = "Complete";
+                            $_SESSION['registerData']['register'] = "Complete";
                             if (isset($_SESSION['registerData'])) {
                                 unset($_SESSION['registerData']);
                             }
-    
                             echo "<script>alert('Usuario editado correctamente'); window.location.href = '?';</script>";
-                            //header("Location:?");
+
                             exit();
                         }else{
-                            $_SESSION['register'] = "Failed";
+                            $_SESSION['registerData']['register'] = "Failed";
                         }
 
                     } else {
-                        //die("create");
+
                         $save = $user->saveUser();
                         if($save){
     
-                            $_SESSION['register'] = "Complete";
+                            $_SESSION['registerData']['register'] = "Complete";
                             if (isset($_SESSION['registerData'])) {
                                 unset($_SESSION['registerData']);
+                                unset($_SESSION["registerMsg"]);
                             }
     
                             echo "<script>alert('Usuario creado correctamente'); window.location.href = '?';</script>";
-                            //header("Location:?");
                             exit();
+                            
                         }else{
-                            $_SESSION['register'] = "Failed";
+                            $_SESSION['registerData']['register'] = "Failed";
                         }
                     }
                     
                 }else{
-                    $_SESSION['register'] = $errores;
-                    header("Location:?controller=user&action=createUser");
+
+                    //--- Guardamos los mensajes de error del registro para mostrarlos en el form ---
+                    $_SESSION['registerMsg'] = $errores;
+
+                    if ($target == "createUser") {
+                        header("Location:?controller=user&action=createUser&e=1");
+                    } else {
+                        header("Location:?controller=user&action=updateUser&id=" . $id);
+                    }
                 }
         }
         
@@ -162,10 +176,8 @@ class userController {
     // --- Eliminar Usuario ---
     public function deleteUser() {
 
-        //die("delete");
-
         $id = isset($_GET['id']) ? $_GET['id'] : false;
-        //die("id=".$id);
+
         // Crear una instancia del modelo User
         $userModel = new User();
 
@@ -182,6 +194,26 @@ class userController {
 
         // Redirigir a la página de listado de usuarios
         header("Location: ?controller=user&action=index");
-        exit();
+    }
+
+
+    // --- Logout ---
+    public function logout() {
+
+        // Iniciar la sesión si aún no está iniciada
+        session_start();
+
+        // Destruir todas las variables de sesión
+        session_unset();
+
+        // Destruir la sesión
+        session_destroy();
+
+        // Redirigir al usuario a la página de inicio de sesión
+        if ($_SERVER['SERVER_NAME'] === 'localhost') {
+            header("Location: ../views/loginForm.php");
+        } else {
+            header("Location: /urbano/views/loginForm.php");
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 require_once("db/db.php");
 require_once("controllers/userController.php");
+require_once("session.php");
 
 
 //--- MAGIA DEL INDEX.PHP ---
@@ -13,10 +14,6 @@ if(isset($_GET['controller'])){
     $nombre_controlador = "userController";
     $action = "index";
     $action_default = "index";
-    
-}else{
-    
-    //show_error(); 
     
 }
 
@@ -35,11 +32,5 @@ if(class_exists($nombre_controlador)){
         $action_default = "index";
         $controlador->$action_default();
         
-    }else{
-        //show_error(); 
     }
-}else{
-    //show_error(); 
-}   
-
-?>
+}

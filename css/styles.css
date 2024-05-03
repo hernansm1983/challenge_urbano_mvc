@@ -7,6 +7,9 @@ body {
 h1 {
     text-align: center;
 }
+h3 {
+    text-align: center;
+}
 form {
     max-width: 400px;
     margin: 0 auto;
@@ -73,6 +76,9 @@ header {
     background-color: #333; /* Color de fondo */
     color: #fff; /* Color del texto */
     padding: 10px; /* Espaciado interior */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header nav ul {
@@ -88,6 +94,30 @@ header nav ul li {
 header nav ul li a {
     color: #fff; /* Color del enlace */
     text-decoration: none; /* Elimina la subrayado */
+}
+
+.user-info a {
+    margin-left: 20px; /* Espacio entre el nombre del usuario y el botón "Salir" */
+    color: white; /* Cambia el color del enlace a blanco */
+    text-decoration: none; /* Elimina la subrayado */
+}
+
+.user-info a:hover {
+    text-decoration: underline; /* Subraya el enlace al pasar el ratón por encima */
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+.user-info a {
+    margin-left: 20px; /* Espacio entre el nombre del usuario y el botón "Salir" */
 }
 
 /* Estilos para el footer */

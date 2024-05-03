@@ -1,6 +1,6 @@
     <!-- Footer -->
     <footer>
-        <p>Challenge Urbano</p>
+        <p>Challenge Urbano - Back-End</p>
     </footer>
 </body>
 </html>
