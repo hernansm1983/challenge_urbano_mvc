@@ -1,4 +1,7 @@
 <?php
+
+require_once("db/db.php");
+
 class User{
 
     private $db;
@@ -83,28 +86,28 @@ class User{
 
     // --- Borra un Usuario por ID ---
     public function deleteUserById($id) {
-        //die("deleteUserById");
+
         // Conectar a la base de datos y realizar la eliminación
         $sql = "DELETE FROM users WHERE id = $id";
-        //die($sql);
         $delete = $this->db->query($sql);
 
         // Verificar si la eliminación fue exitosa
         if ($delete) {
-            return true; // Eliminación exitosa
+            return true;
         } else {
-            return false; // Error al eliminar
+            return false;
         }
-            // Aquí realizas la eliminación de una persona de la base de datos
+
     }
 
 
     // --- Obtiene Un Usuario por Email ---
     public function getUserByEmail($email){
+
         $email = $this->db->real_escape_string($email);
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $result = $this->db->query($sql);
-        
+
         if ($result->num_rows == 1) {
             return $result->fetch_assoc();
         } else {

@@ -2,12 +2,16 @@
 
 
 require_once("models/User.php");
-//$per = new User();
 
 class userController {
 
     // --- Carga la vista de todos los Usuarios creados ---
     public function index() {
+
+        if (isset($_SESSION['registerMsg'])) {
+            unset($_SESSION['registerMsg']);
+        }
+
         $per = new User();
         $datos = $per->getUsers();
         require_once("views/usersList.php");
@@ -17,7 +21,9 @@ class userController {
     // --- Carga el Form de creacion de Usuarios ---
     public function createUser() {
         // --- limpiamos las variables de session antes de redireccionar al form ---
-        $this->clearSession();
+        if (isset($_SESSION['registerData']) && $_GET['e'] != 1) {
+            unset($_SESSION['registerData']);
+        }
         require_once("views/usersCreateForm.php");
     }
 
@@ -37,8 +43,6 @@ class userController {
             $_SESSION['registerData']['action'] = "update";
 
             require_once("views/usersCreateForm.php");
-        } else {
-            // ERROR
         }
     }
 
@@ -63,10 +67,8 @@ class userController {
             $_SESSION['registerData']['action'] = "create";
             $action = isset($_POST['action']) ? $_POST['action'] : false;
             $target = isset($_POST['target']) ? $_POST['target'] : false;
-            //echo $target;
             
             $id = isset($_POST['id']) ? $_POST['id'] : false;
-            //die("id=".$id);
             $name = isset($_POST['name']) ? $_POST['name'] : false;
             $surname = isset($_POST['surname']) ? $_POST['surname'] : false;
             $email = isset($_POST['email']) ? trim($_POST['email']) : false;
@@ -121,7 +123,7 @@ class userController {
                 
                     // --- Se llama al create o al update ---
                     if (!empty($id) && $target == "updateUser") {
-                        //die("update");
+
                         $save = $user->updateUser($id);
 
                         if($save){
@@ -138,7 +140,7 @@ class userController {
                         }
 
                     } else {
-                        //die("create");
+
                         $save = $user->saveUser();
                         if($save){
     
@@ -162,11 +164,10 @@ class userController {
                     $_SESSION['registerMsg'] = $errores;
 
                     if ($target == "createUser") {
-                        header("Location:?controller=user&action=createUser");
+                        header("Location:?controller=user&action=createUser&e=1");
                     } else {
                         header("Location:?controller=user&action=updateUser&id=" . $id);
                     }
-                    //die("error");
                 }
         }
         
@@ -175,10 +176,8 @@ class userController {
     // --- Eliminar Usuario ---
     public function deleteUser() {
 
-        //die("delete");
-
         $id = isset($_GET['id']) ? $_GET['id'] : false;
-        //die("id=".$id);
+
         // Crear una instancia del modelo User
         $userModel = new User();
 
@@ -195,7 +194,6 @@ class userController {
 
         // Redirigir a la página de listado de usuarios
         header("Location: ?controller=user&action=index");
-        exit();
     }
 
 
@@ -203,9 +201,7 @@ class userController {
     public function logout() {
 
         // Iniciar la sesión si aún no está iniciada
-        //if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        //}
+        session_start();
 
         // Destruir todas las variables de sesión
         session_unset();
@@ -214,7 +210,10 @@ class userController {
         session_destroy();
 
         // Redirigir al usuario a la página de inicio de sesión
-        header("Location: ../views/loginForm.php");
-        exit();
+        if ($_SERVER['SERVER_NAME'] === 'localhost') {
+            header("Location: ../views/loginForm.php");
+        } else {
+            header("Location: /urbano/views/loginForm.php");
+        }
     }
 }

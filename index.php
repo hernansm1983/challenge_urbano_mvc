@@ -32,11 +32,5 @@ if(class_exists($nombre_controlador)){
         $action_default = "index";
         $controlador->$action_default();
         
-    }else{
-        //show_error(); 
     }
-}else{
-    //show_error(); 
-}   
-
-?>
+}

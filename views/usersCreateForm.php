@@ -2,8 +2,6 @@
 
 include_once("views/header.php");
 
-//var_dump($_SESSION);//die();
-//echo $_GET['action'];
 if ($_GET['action'] == "updateUser") {
     $titulo = "Actualizar ";
     $boton = "Actualizar";
@@ -16,7 +14,9 @@ if ($_GET['action'] == "updateUser") {
 ?>
     <body>
         <h1><?=$titulo?> Usuario</h1>
-
+        <?php if ($target == "updateUser") { ?>
+            <h3>Solo podrá editar los datos del usuario ingresando nuevamente la contraseña</h3>
+        <?php } ?>
         <!-- --- Mensaje del Registro --->
   
         <?php if(isset($_SESSION['registerData']['register']) && $_SESSION['registerData']['register'] == "Failed"): ?>

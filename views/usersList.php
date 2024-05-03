@@ -23,7 +23,7 @@
                 echo "<td>" . $dato["updated_at"] . "</td>";
                 echo "<td>";
                 echo "<a href='?controller=user&action=updateUser&id=" . $dato["id"] . "'>Editar</a> | ";
-                echo "<a href='?controller=user&action=deleteUser&id=" . $dato["id"] . "' onclick='confirmDelete(" . $dato["id"] . ")'>Eliminar</a>";
+                echo "<a href='#' onclick='confirmDelete(" . $dato["id"] . ")'>Eliminar</a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -32,7 +32,7 @@
         <script>
             function confirmDelete(userId) {
                 if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-                   // window.location.href = "?controller=user&action=deleteUser&id=" + userId;
+                    window.location.href = "?controller=user&action=deleteUser&id=" + userId;
                 }
             }
         </script>

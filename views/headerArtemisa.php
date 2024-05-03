@@ -1,17 +1,16 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
     <title>Challenge Urbano</title>
-    <link rel="stylesheet" type="text/css" href="../css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/urbano/css/styles.css">
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav>
             <ul>
-                <li><a href="../front.php" target="self">Front-End</a></li>
+                <li><a href="/urbano/front.php" target="self">Front-End</a></li>
                 <li><a href="?controller=user&action=index">Home</a></li>
                 <li><a href="?controller=user&action=createUser">Alta Usuarios</a></li>
             </ul>
