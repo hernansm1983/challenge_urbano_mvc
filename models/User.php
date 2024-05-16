@@ -34,34 +34,38 @@ class User{
 
 
     // --- Obtiene un Usuario por ID ---
-    public function getUserById($id){
+    public function getUserById($id) {
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
 
-        $sql = $this->db->query("SELECT * FROM users WHERE id = '$id' ");
-
-        $user = $sql->fetch_assoc();
-
+        $stmt->close();
         return $user;
     }
 
 
     // --- Guarda los datos de un Usuario ---
-    public function saveUser(){
-        $sql = "INSERT INTO `users` (`id`, `name`, `surname`, `password`, `email`) 
-                VALUES (null, 
-                        '{$this->getName()}', 
-                        '{$this->getSurname()}', 
-                        '{$this->getPassword()}', 
-                        '{$this->getEmail()}')";
+    public function saveUser() {
+        $sql = "INSERT INTO `users` (`name`, `surname`, `password`, `email`) 
+                VALUES (?, ?, ?, ?)";
 
-        $save = $this->db->query($sql);
-        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('ssss', $this->name, $this->surname, $this->password, $this->email);
+
         $result = false;
-        if($save){
-            $result = true;
+
+        if ($stmt->execute()) {
+            $lastInsertedId = $stmt->insert_id;
+            $result = $this->getUserById($lastInsertedId);
         }
-        
+
+        $stmt->close();
         return $result;
     }
+
 
 
     // --- Actualiza un Usuario por ID ---
@@ -88,11 +92,16 @@ class User{
     public function deleteUserById($id) {
 
         // Conectar a la base de datos y realizar la eliminación
-        $sql = "DELETE FROM users WHERE id = $id";
-        $delete = $this->db->query($sql);
+        $sql = "DELETE FROM users WHERE `id` = ? ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $rowDeleted = $stmt->affected_rows;
+
+        $stmt->close();
 
         // Verificar si la eliminación fue exitosa
-        if ($delete) {
+        if ($rowDeleted > 0) {
             return true;
         } else {
             return false;
